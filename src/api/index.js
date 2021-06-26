@@ -11,3 +11,12 @@ const client = axios.create({
 export function fetchTasks() {
 	return client.get('/tasks');
 }
+
+export function createTask(params) {
+	return client.post('/tasks', params);
+}
+
+//post new version of task (edited task)
+export function editTask(id, params) {
+	return axios.put(`${API_BASE_URL}/tasks/${id}`, params);
+}

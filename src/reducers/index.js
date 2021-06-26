@@ -1,35 +1,50 @@
 
-export default function tasks (state = { tasks: [] }, action) {
-	if (action.type === 'CREATE_TASK') {
-    return {
-      tasks: state.tasks.concat(action.payload)
-    };
-  }
-  if (action.type === 'CHANGE_STATUS') {
-//use spread of object props: ...task, status: new status to change status in object
-//if i change directly state (without newtasks) state changes, but no rerender of components happen
-    let newtasks = state.tasks.map(task => task.id === action.payload.id ? {...task, status: action.payload.status} : task);
-    return {
-      tasks: newtasks
-    };
-  }
+const initialState = {
+  tasks: [], 
+  isLoading: false,
+  error: null,
+};
 
-  if (action.type === 'EDIT_TASK') {
-//use Object.assign to copy all props from task then from payload.
-//if i change directly state (without newtasks) state changes, but no rerender of components happen
-    const { payload } = action;
-    let newtasks = state.tasks.map(task => task.id === payload.id ? Object.assign({}, task, payload.params) : task);
-    return {
-      tasks: newtasks
-    };
+export default function tasks(state = initialState, action) {
+	
+  switch (action.type) {
+    case 'FETCH_TASKS_FAILED': {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload.error,
+      };
+    }
+    case 'FETCH_TASKS_STARTED': {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    }
+    case 'FETCH_TASKS_SUCCEEDED': {
+      return {
+        ...state, 
+        isLoading: false,
+        tasks: action.payload.tasks,
+      };
+    } 
+    case 'CREATE_TASK_SUCCEEDED': {
+      return {
+        ...state,
+        tasks: state.tasks.concat(action.payload.task),
+      };
+    }
+    case 'EDIT_TASK_SUCCEEDED': {
+      const { payload } = action;
+      const nextTasks = state.tasks.map(task => 
+          task.id === payload.task.id ? payload.task : task);
+      return {
+        ...state,
+        tasks: nextTasks,
+      };
+    }
+    default: {
+      return state;
+    }
   }
-
-//when fetch sicceeded, payload contains fetched tasks from the server;
-  if (action.type === 'FETCH_TASKS_SUCCEEDED') {
-    return {
-      tasks: action.payload.tasks,
-    };
-  }
-
-  return state;
 }
