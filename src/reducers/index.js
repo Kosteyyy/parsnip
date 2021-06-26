@@ -1,21 +1,5 @@
-import { uniqueId } from '../actions/index.js';
 
-const mockTasks = [
-  {
-    id: uniqueId(),
-    title: 'Learn Redux',
-    description: 'The store, actions, and reducers, oh my!',
-    status: 'In Progress',
-  },
-  {
-    id: uniqueId(),
-    title: 'Peace on Earth',
-    description: 'No big deal... Or maybe big...',
-    status: 'In Progress',
-  },
-];
-
-export default function tasks (state = { tasks: mockTasks }, action) {
+export default function tasks (state = { tasks: [] }, action) {
 	if (action.type === 'CREATE_TASK') {
     return {
       tasks: state.tasks.concat(action.payload)
@@ -37,6 +21,13 @@ export default function tasks (state = { tasks: mockTasks }, action) {
     let newtasks = state.tasks.map(task => task.id === payload.id ? Object.assign({}, task, payload.params) : task);
     return {
       tasks: newtasks
+    };
+  }
+
+//when fetch sicceeded, payload contains fetched tasks from the server;
+  if (action.type === 'FETCH_TASKS_SUCCEEDED') {
+    return {
+      tasks: action.payload.tasks,
     };
   }
 
