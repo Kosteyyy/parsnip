@@ -8,6 +8,7 @@ import thunk from 'redux-thunk';
 import tasksReducer from './reducers';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import reportWebVitals from './reportWebVitals';
+import logger from './middleware/logger.js';
 
 
 const rootReducer = (state = {}, action) => {
@@ -16,7 +17,10 @@ const rootReducer = (state = {}, action) => {
 	};
 };
 
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
+const store = createStore(
+	rootReducer,
+	composeWithDevTools(applyMiddleware(thunk, logger))
+);
 
 ReactDOM.render(
   <Provider store={store}>

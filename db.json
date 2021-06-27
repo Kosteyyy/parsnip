@@ -18,7 +18,7 @@
     {
       "title": "111",
       "description": "222",
-      "status": "Completed",
+      "status": "In Progress",
       "id": 4
     },
     {
@@ -30,7 +30,7 @@
     {
       "title": "Kill Bill",
       "description": "Very important",
-      "status": "In Progress",
+      "status": "Completed",
       "id": 6
     },
     {
